@@ -1,4 +1,8 @@
 ---
+server:
+  contextPath: /omar-services-monitor
+
+---
 grails:
     profile: react-webpack
     codegen:
@@ -134,10 +138,11 @@ environments:
 ---
 omar:
   app:
+    # Takes a list of root urls of omar deployments
     deployments:
       -
         url: "https://omar-dev.ossim.io"
       -
         url: "https://omar-stage.ossim.io"
-    #   -
-    #     url: "https://omar.ossim.io"
+      -
+        url: "https://omar.ossim.io"
