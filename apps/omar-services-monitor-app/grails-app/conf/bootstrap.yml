@@ -1,6 +1,6 @@
 spring:
   application:
-    name: omar-streetview
+    name: omar-services-monitor
   cloud:
     config:
       enabled: false
