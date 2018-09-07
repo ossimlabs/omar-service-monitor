@@ -7,6 +7,9 @@ spring:
       uri: http://localhost:8888/omar-config-server
     discovery:
       enabled: false
+    service-registry:
+      auto-registration:
+        enabled: ${spring.cloud.discovery.enabled}
   sleuth:
     enabled: false
   zipkin:
