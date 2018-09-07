@@ -31,39 +31,54 @@ class Instance extends Component {
   };
 
   fetchInstanceMetrics = () => {
-    const app = this.props.data.app.toLowerCase();
-    fetch(`${this.props.server}/${app}/metrics`)
-      .then(function(response) {
-        return response.json();
-      })
-      .then(instanceMetricsJson => {
-        console.log("instanceMetricsJson:", instanceMetricsJson);
-        const instanceMetrics = instanceMetricsJson;
-        //      console.log("Metrics (uptime):", instanceMetricsJson.uptime);
-        //this.props.getVersion(instanceInfo.version);
+    // Need to set a variable for this so that we can still access
+    // 'this' for props and state inside the setInterval callback
+    // function
+    let _this = this;
 
-        this.setState({ instanceMetrics });
-      })
-      .catch(error =>
-        console.error(
-          `[Fetch InstanceMetrics Error] connecting to ${
-            this.props.server
-          } with ${error}`
-        )
+    let instancesTimer = setInterval(function fetchInstancesData() {
+      console.log("################# instances ############## ");
+
+      const app = _this.props.data.app.toLowerCase();
+      fetch(`${_this.props.server}/${app}/metrics`)
+        .then(function(response) {
+          return response.json();
+        })
+        .then(instanceMetricsJson => {
+          // console.log("instanceMetricsJson:", instanceMetricsJson);
+          const instanceMetrics = instanceMetricsJson;
+          // console.log("Metrics (uptime):", instanceMetricsJson.uptime);
+          // this.props.getVersion(instanceInfo.version);
+
+          _this.setState({ instanceMetrics });
+        })
+        .catch(error =>
+          console.error(
+            `[Fetch InstanceMetrics Error] connecting to ${
+              _this.props.server
+            }/${app}/metrics with ${error}`
+          )
+        );
+
+      // Clear the initial 7.5 second pole interval
+      clearInterval(instancesTimer);
+
+      // Set a new pole interval to use what is passed in from the app configuration.
+      // The default from the configuration is every 30 seconds.
+      instancesTimer = setInterval(
+        fetchInstancesData,
+        AppParams.params.instancesPoleTime
       );
+    }, 7500); // Intial pole for deployments is after 7. 5 seconds
   };
 
   componentDidMount() {
-    console.log("Instance props:", this.props);
     this.fetchInstanceInfo();
     this.fetchInstanceMetrics();
   }
 
   getUptime(time) {
     let duration = moment.duration(time, "milliseconds").humanize();
-    console.log("duration: ", duration);
-    //let days = duration.asDays();
-    //console.log(days);
     return duration;
   }
 

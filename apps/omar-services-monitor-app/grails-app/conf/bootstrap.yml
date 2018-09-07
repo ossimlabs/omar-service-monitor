@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: omar-services-monitor
+  cloud:
+    config:
+      enabled: false
+      uri: http://localhost:8888/omar-config-server
+    discovery:
+      enabled: false
+  sleuth:
+    enabled: false
+  zipkin:
+   enabled: false
+---
+spring:
+  profiles: production
+  cloud:
+    config:
+      uri: http://omar-config-server:8888/omar-config-server

@@ -12,51 +12,73 @@ class Deployment extends Component {
   };
 
   fetchDeployment = () => {
-    fetch(`${this.props.server}/omar-eureka-server/env`)
-      .then(function(response) {
-        // if (!response.ok) {
-        //   throw Error(response.statusText);
-        // }
-        return response.json();
-      })
-      .then(deploymentJson => {
-        //console.log("deploymentJson: ", deploymentJson['configService:file:/home/omar/configs/application.yml']);
-        const deployment =
-          deploymentJson[
-            "configService:file:/home/omar/configs/application.yml"
-          ];
-        //console.log("deployment: ", deployment);
-        this.setState({ deploymentInfo: deployment });
-      })
-      .catch(error => {
-        console.error(`[Fetch Deployments Error] connecting to ${this.props.server} with ${error}`);
-        this.setState({ error: true });
-      });
+    // Need to set a variable for this so that we can still access
+    // 'this' for props and state inside the setInterval callback
+    // function
+    let _this = this;
+
+    let deploymentTimer = setInterval(function fetchDeploymentData() {
+      console.log("################# deployment ############## ");
+      fetch(`${_this.props.server}/omar-eureka-server/env`)
+        .then(function(response) {
+          return response.json();
+        })
+        .then(deploymentJson => {
+          const deployment =
+            deploymentJson[
+              "configService:file:/home/omar/configs/application.yml"
+            ];
+          console.log("deployment: ", deployment);
+          _this.setState({ deploymentInfo: deployment });
+        })
+        .catch(error => {
+          console.error(`[Fetch Deployments Error] connecting to ${_this.props.server} with ${error}`);
+          _this.setState({ error: true });
+        });
+
+      // Clear the initial 1 second pole interval
+      clearInterval(deploymentTimer);
+
+      // Set a new pole interval to use what is passed in from the app configuration.
+      // The default from the configuration is every 90 seconds.
+      deploymentTimer = setInterval(fetchDeploymentData, AppParams.params.deploymentPoleTime);
+    }, 1000); // Intial pole for deployments is after 1 second
   };
 
   fetchApps = () => {
-    setInterval(() => {
-      //console.log("fetching apps...");
-      fetch(`${this.props.server}/omar-eureka-server/eureka/apps`, {
+    // Need to set a variable for this so that we can still access
+    // 'this' for props and state inside the setInterval callback
+    // function
+    let _this = this;
+
+    let appsTimer = setInterval(function fetchAppsData() {
+      console.log("################# apps ############## ");
+
+      fetch(`${_this.props.server}/omar-eureka-server/eureka/apps`, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json"
         }
       })
-        .then(function(response) {
-          return response.json();
-        })
-        .then(eurekaJson => {
-          const Apps = eurekaJson;
-          this.setState({ appsInfo: Apps });
-        })
-        .catch(error => console.error(`[Fetch Apps Error] connecting to ${this.props.server} with ${error}`));
-    }, 5000);
+      .then(function(response) {
+        return response.json();
+      })
+      .then(eurekaJson => {
+        const Apps = eurekaJson;
+        _this.setState({ appsInfo: Apps });
+      })
+      .catch(error => console.error(`[Fetch Apps Error] connecting to ${_this.props.server} with ${error}`));
+
+      // Clear the initial 3 second pole interval
+      clearInterval(appsTimer);
+
+      // Set a new pole interval to use what is passed in from the app configuration.
+      // The default from the configuration is every 60 seconds.
+      appsTimer = setInterval(fetchAppsData, AppParams.params.appsPoleTime);
+    }, 3000); // Intial pole for deployments is after 3 seconds
   };
 
   componentDidMount() {
-    //console.log(AppParams); // Passed down from .gsp
-    //console.log("Deployment server:", this.props.server);
     this.fetchDeployment();
     this.fetchApps();
   }
@@ -70,7 +92,7 @@ class Deployment extends Component {
       );
     }
     else if (this.state.appsInfo.length === 0 && this.state.error === true) {
-      return (<div className="deployment"><p className="chip red lighten-1"><span className="white-text">There was an error fetching the details of the {this.props.server} deployment</span></p></div>)
+      return (<div className="deployment"><p className="chip red lighten-1 z-depth-2"><span className="white-text">There was an error fetching the details of the {this.props.server} deployment</span></p></div>)
     }
 
     return (
@@ -81,15 +103,13 @@ class Deployment extends Component {
           Version: {this.state.deploymentInfo.releaseNumber} (
             {this.state.deploymentInfo.releaseName})
           </p>
-
-            {this.state.appsInfo.applications.application.map((app, i) => {
-              return (
-                <div className="col s2 z-depth-2 service" key={i}>
-                  <ServiceMonitor server={this.props.server} app={app} />
-                </div>
-              );
-            })}
-
+          {this.state.appsInfo.applications.application.map((app, i) => {
+            return (
+              <div className="col s2 z-depth-2 service" key={i}>
+                <ServiceMonitor server={this.props.server} app={app} />
+              </div>
+            );
+          })}
         </section>
       </div>
     );
