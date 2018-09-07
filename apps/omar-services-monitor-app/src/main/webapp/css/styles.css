@@ -1,0 +1,92 @@
+/* fallback */
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://fonts.gstatic.com/s/materialicons/v41/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2) format('woff2');
+  }
+
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+  }
+
+.deployment {
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+.deployment-url {
+  margin-top: 5px;
+  margin-bottom: 3px;
+}
+
+.deployment-version {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.service {
+  background-color: whitesmoke;
+  margin: 5px !important;
+  padding: 0px 15px 10px 15px !important;
+}
+
+.service-name {
+  padding-left: 5px;
+  font-size: 11px;
+  margin-bottom: 5px;
+  background-color: silver;
+}
+
+.service-version {
+  font-size: 9px;
+}
+
+.instance {
+  padding: 2px 10px;
+  color: white;
+  margin-bottom: 5px;
+}
+
+.instance-text {
+  font-size: 9px;
+}
+
+.instance-label {
+  font-weight: 900;
+}
+
+.row {
+  margin-bottom: 0px;
+}
+
+.row .col {
+  padding: 0px 0.15rem;
+}
+
+.pod {
+  font-size: 9px;
+  color: white;
+  padding: 2.5px;
+  margin: 1px;
+}
+
+.pod-up {
+  background-color: green;
+}
+
+.pod-down {
+  background-color: red;
+}

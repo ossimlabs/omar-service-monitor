@@ -1,0 +1,19 @@
+pluginManagement {
+  repositories {
+    maven { url "${ System.getenv('REPOSITORY_MANAGER_URL') }/ossim-deps" }
+    gradlePluginPortal()
+  }
+}
+def final O2_DEV_HOME = System.getenv('O2_DEV_HOME')
+
+if ( O2_DEV_HOME ) {
+
+   include 'omar-services-monitor-app'
+          //  'omar-hibernate-spatial-plugin',
+          //  'omar-core-plugin'
+
+  project(':omar-services-monitor-app').projectDir = "${O2_DEV_HOME}/omar-services-monitor/apps/omar-services-monitor-app" as File
+  // project(':omar-core-plugin').projectDir = "${O2_DEV_HOME}/omar-core/plugins/omar-core-plugin" as File
+  // project(':omar-hibernate-spatial-plugin').projectDir = "${O2_DEV_HOME}/omar-hibernate-spatial/plugins/omar-hibernate-spatial-plugin" as File
+
+}
