@@ -122,7 +122,7 @@ class Deployment extends Component {
       <React.Fragment>
         <hr/>
         <div className="deployment">
-          {/* <div className="right">Test: {AppParams.params.test}</div> */}
+          <div className="right">Test: {AppParams.params.test}</div>
           <section>
             <p className="deployment-info">
               <a href={this.props.server}>{this.props.server}</a>
