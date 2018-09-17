@@ -136,17 +136,20 @@ omar:
     # Takes a list of root urls of omar deployments
     deployments:
       -
-        url: "https://omar-dev.ossim.io"
+        url: "https://omar.ossim.io"
+      -
+        url: https://pki-omar-evwhs.ossim.io
       -
         url: "https://omar-stage.ossim.io"
       -
-        url: "https://omar.ossim.io"
+        url: "https://omar-dev.ossim.io"
     # Sets the amount of time (in milliseconds) to pole the Eureka endpoint for the deployments
     deploymentPoleTime: 90000
     # Sets the amount of time (in milliseconds) to pole the Eureka endpoint for the applications
     appsPoleTime: 60000
     # Sets the amount of time (in milliseconds) to pole the Eureka endpoint for the services (pod instances)
     servicesPoleTime: 30000
-    # Sets the amount of time (in milliseconds) to pole the Eureka endpoint for the instances (for metrics and info)
-    instancesPoleTime: 15000
+    # # Sets the amount of time (in milliseconds) to pole the Eureka endpoint for the instances (for metrics and info)
+    # instancesPoleTime: 15000
+    test: "omarFTW!"
 
