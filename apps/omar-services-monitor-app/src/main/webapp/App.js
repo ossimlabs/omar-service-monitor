@@ -42,7 +42,7 @@ class App extends Component {
         AppParams.params.deployments.map((deployment, i) => {
           return (
             <div className="row" key={i}>
-              <Deployment server={deployment.url} />
+              <Deployment server={deployment} />
             </div>
           );
         })}
