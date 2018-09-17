@@ -32,18 +32,10 @@ class Instance extends Component {
   };
 
   componentDidMount() {
-    console.log('this.state.instanceMetrics:', this.state.instanceMetrics);
-    console.log(`${this.props.server} ${this.props.data.app} instance.props.data.leaseInfo.serviceUpTimestamp => `, this.props.data.leaseInfo.serviceUpTimestamp);
     this.fetchInstanceInfo();
-    //this.fetchInstanceMetrics();
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('#############################');
-    console.log(`${this.props.server} ${this.props.data.app}`);
-    console.log('props: ', this.props.data.leaseInfo.serviceUpTimestamp);
-    console.log('nextProps: ', nextProps.data.leaseInfo.serviceUpTimestamp);
-    console.log('#############################');
     // Update the state when new props are passed in from the parent component
     this.setState({ instanceMetrics: nextProps.data.leaseInfo.serviceUpTimestamp });
   }

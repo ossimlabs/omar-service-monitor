@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import ServiceMonitor from "./ServiceMonitor";
 
-//import { SERVER_URL, CLIENT_VERSION, REACT_VERSION } from "./config";
 import "whatwg-fetch";
 
 class Deployment extends Component {
@@ -12,7 +11,6 @@ class Deployment extends Component {
   };
 
   fetchDeployment = () => {
-    //console.log("AppParams: ", AppParams.params);
 
     // Need to set a variable for this so that we can still access
     // 'this' for props and state inside the setInterval callback
@@ -20,7 +18,6 @@ class Deployment extends Component {
     let _this = this;
 
     let deploymentTimer = setInterval(function fetchDeploymentData() {
-      //console.log("################# deployment ############## ");
       fetch(`${_this.props.server}/omar-eureka-server/env`)
         .then(function(response) {
           return response.json();
@@ -30,7 +27,6 @@ class Deployment extends Component {
             deploymentJson[
               "configService:file:/home/omar/configs/application.yml"
             ];
-          //console.log("deployment: ", deployment);
           _this.setState({ deploymentInfo: deployment });
           _this.setState({ error: false });
         })
@@ -62,8 +58,6 @@ class Deployment extends Component {
     let _this = this;
 
     let appsTimer = setInterval(function fetchAppsData() {
-      //console.log("################# apps ############## ");
-
       fetch(`${_this.props.server}/omar-eureka-server/eureka/apps`, {
         headers: {
           Accept: "application/json",

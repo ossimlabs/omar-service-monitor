@@ -17,10 +17,8 @@ class ServiceMonitor extends Component {
 
     let servicesTimer = setInterval(
       function fetchServicesData() {
-        //console.log("################# services ############## ");
 
         const appName = _this.props.app.name.toLowerCase();
-        //console.log('appName: ', appName);
         fetch(
           `${_this.props.server}/omar-eureka-server/eureka/vips/${appName}`,
           {
@@ -35,15 +33,8 @@ class ServiceMonitor extends Component {
           })
           .then(instanceJson => {
             const instances = instanceJson.applications.application[0].instance;
-            // console.log(
-            //   `${
-            //     _this.props.server
-            //   }/omar-eureka-server/eureka/vips/${appName} JSON`,
-            //   instances
-            // );
 
             _this.setState({ instances: instances });
-            //console.log("State in the ServiceMonitor", this.state);
           })
           .catch(error =>
             console.error(
@@ -72,7 +63,6 @@ class ServiceMonitor extends Component {
   };
 
   componentDidMount() {
-    //console.log('ServiceMonitor Props: ', this.props);
     this.fetchServices();
   }
 
