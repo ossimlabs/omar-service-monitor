@@ -63,7 +63,7 @@ class Instance extends Component {
       <div>No Metrics</div>
     );
 
-    let metrics = parseFloat(this.getInstanceStatus(this.state.instanceMetrics));
+    let metrics = Math.round(parseFloat(this.getInstanceStatus(this.state.instanceMetrics)));
 
     if(metrics < 1) {
       return <div className="left pod pod-yellow z-depth-1">{instanceTimeUp}</div>
