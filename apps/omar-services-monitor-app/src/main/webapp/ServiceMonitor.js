@@ -75,8 +75,8 @@ class ServiceMonitor extends Component {
       <React.Fragment>
         <p className="service-name">
           {this.props.app.name} {this.state.version}<br/ >
-          <hr/>
         </p>
+        <hr/>
         {this.state.instances.map((instance, i) => {
           return (
             <div key={i}>
