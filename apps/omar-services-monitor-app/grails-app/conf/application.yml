@@ -134,10 +134,10 @@ environments:
 omar:
   app:
     # Takes a list of root urls of omar deployments
-    deployments:
-      - "https://omar.ossim.io"
-      - "https://omar.ossim.io"
-      - "https://omar.ossim.io"
+    deployments: ['https://omar.ossim.io', 'https://omar-dev.ossim.io', 'https://pki-omar-evwhs.ossim.io']
+    #   - "https://omar.ossim.io"
+    #   - "https://omar.ossim.io"
+    #   - "https://omar.ossim.io"
     # Sets the amount of time (in milliseconds) to pole the Eureka endpoint for the deployments
     deploymentPoleTime: 90000
     # Sets the amount of time (in milliseconds) to pole the Eureka endpoint for the applications
