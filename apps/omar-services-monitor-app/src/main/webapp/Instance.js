@@ -8,7 +8,6 @@ class Instance extends Component {
   };
 
   fetchInstanceInfo = () => {
-    //console.log(Math.round(this.props.data.leaseInfo.serviceUpTimestamp));
     const app = this.props.data.app.toLowerCase();
     fetch(`${this.props.server}/${app}/info`)
       .then(function(response) {
@@ -63,7 +62,8 @@ class Instance extends Component {
       <div>No Metrics</div>
     );
 
-    let metrics = Math.round(parseFloat(this.getInstanceStatus(this.state.instanceMetrics)));
+    let metrics = parseFloat(this.getInstanceStatus(this.state.instanceMetrics));
+    console.log(`metrics ${this.props.data.instanceId}:`, metrics);
 
     if(metrics < 1) {
       return <div className="left pod pod-yellow z-depth-1">{instanceTimeUp}</div>
