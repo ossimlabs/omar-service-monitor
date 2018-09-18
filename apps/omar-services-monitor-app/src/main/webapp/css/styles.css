@@ -102,14 +102,29 @@
 .pod-red {
   background-color: red;
   color: white;
+  background: repeating-linear-gradient(
+    45deg,
+    red,
+    red 10px,
+    IndianRed 10px,
+    IndianRed 20px
+  );
+
 }
 
-.pod-yellow {
-  background-color: yellow;
+.pod-orange {
+  background-color: orange;
 }
 
 .pod-lightgreen {
   background-color: lightgreen;
+  background: repeating-linear-gradient(
+    45deg,
+    lawngreen,
+    lawngreen 10px,
+    Aquamarine  10px,
+    Aquamarine  20px
+  );
 }
 
 .pod-green {
