@@ -10,7 +10,7 @@ class ServiceMonitor extends Component {
   };
 
   fetchServices = () => {
-    console.log(`Fetching Deploymentss with pole time of: ${AppParams.params.servicesPoleTime}`);console.log('Fetching Services...');
+    console.log(`Fetching Services with pole time of: ${AppParams.params.servicesPoleTime}`);console.log('Fetching Services...');
     // Need to set a variable for this so that we can still access
     // 'this' for props and state inside the setInterval callback
     // function

@@ -32,6 +32,18 @@ class Instance extends Component {
 
   componentDidMount() {
     this.fetchInstanceInfo();
+    // Set new thresholds
+    moment.relativeTimeThreshold('s', 59);
+    moment.relativeTimeThreshold('m', 59);
+    moment.relativeTimeThreshold('h', 24);
+    moment.relativeTimeThreshold('d', 30);
+    moment.relativeTimeThreshold('M', 12);
+
+    console.log('seconds', moment.relativeTimeThreshold('s'));  // 45
+    console.log('hours', moment.relativeTimeThreshold('m'));  // 45
+    console.log('hours', moment.relativeTimeThreshold('h'));  // 22
+    console.log('days', moment.relativeTimeThreshold('d'));  // 26
+    console.log('months', moment.relativeTimeThreshold('M'));  // 11
   }
 
   componentWillReceiveProps(nextProps) {
@@ -63,10 +75,10 @@ class Instance extends Component {
     );
 
     let metrics = parseFloat(this.getInstanceStatus(this.state.instanceMetrics));
-    console.log(`metrics ${this.props.data.instanceId}:`, metrics);
+    //console.log(`metrics ${this.props.data.instanceId}:`, metrics);
 
     if(metrics < 1) {
-      return <div className="left pod pod-yellow z-depth-1">{instanceTimeUp}</div>
+      return <div className="left pod pod-orange z-depth-1">{instanceTimeUp}</div>
     }
     else if (metrics >= 1 && metrics < 24) {
       return <div className="left pod pod-lightgreen z-depth-1">{instanceTimeUp}</div>
