@@ -21,7 +21,7 @@ class App extends Component {
             <span className="legend-pod pod pod-red z-depth-1">
               Error
             </span>
-            <span className="legend-pod pod pod-yellow z-depth-1">
+            <span className="legend-pod pod pod-orange z-depth-1">
               &lt; 1 hr
             </span>
             <span className="legend-pod pod pod-lightgreen z-depth-1">
