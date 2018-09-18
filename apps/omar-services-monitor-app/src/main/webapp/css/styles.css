@@ -114,6 +114,7 @@
 
 .pod-orange {
   background-color: orange;
+  color: white;
 }
 
 .pod-lightgreen {
@@ -125,6 +126,7 @@
     Aquamarine  10px,
     Aquamarine  20px
   );
+  color: grey;
 }
 
 .pod-green {
@@ -134,4 +136,5 @@
 
 .pod-blue {
   background-color: #01B9E4;
+  color: white;
 }
