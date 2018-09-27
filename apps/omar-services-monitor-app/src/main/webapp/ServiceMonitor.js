@@ -10,7 +10,11 @@ class ServiceMonitor extends Component {
   };
 
   fetchServices = () => {
-    console.log(`Fetching Services with pole time of: ${AppParams.params.servicesPoleTime}`);console.log('Fetching Services...');
+    console.log(
+      `Fetching Services with pole time of: ${
+        AppParams.params.servicesPoleTime
+      }`
+    );
     // Need to set a variable for this so that we can still access
     // 'this' for props and state inside the setInterval callback
     // function
@@ -18,7 +22,6 @@ class ServiceMonitor extends Component {
 
     let servicesTimer = setInterval(
       function fetchServicesData() {
-
         const appName = _this.props.app.name.toLowerCase();
         fetch(
           `${_this.props.server}/omar-eureka-server/eureka/vips/${appName}`,
@@ -75,9 +78,10 @@ class ServiceMonitor extends Component {
     return (
       <React.Fragment>
         <p className="service-name">
-          {this.props.app.name} {this.state.version}<br/ >
+          {this.props.app.name} {this.state.version}
+          <br />
         </p>
-        <hr/>
+        <hr />
         {this.state.instances.map((instance, i) => {
           return (
             <div key={i}>
@@ -89,7 +93,6 @@ class ServiceMonitor extends Component {
             </div>
           );
         })}
-
       </React.Fragment>
     );
   }
