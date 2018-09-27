@@ -11,12 +11,28 @@ class Deployment extends Component {
   };
 
   fetchDeployment = () => {
-    console.log(`Fetching Deployments with pole time of: ${AppParams.params.deploymentPoleTime}`);
+    console.log(
+      `Fetching Deployments with pole time of: ${
+        AppParams.params.deploymentPoleTime
+      }`
+    );
 
     // Need to set a variable for this so that we can still access
     // 'this' for props and state inside the setInterval callback
     // function
     let _this = this;
+
+    let profile;
+    if (_this.props.profile == null) {
+      profile = "";
+    } else {
+      profile = `-${_this.props.profile}`;
+    }
+    console.log(
+      `configService:file:/home/omar/configs/application${profile}.yml`
+    );
+    // let profile = this.props.profile;
+    // console.log("profile: ", profile);
 
     let deploymentTimer = setInterval(function fetchDeploymentData() {
       fetch(`${_this.props.server}/omar-eureka-server/env`)
@@ -26,7 +42,7 @@ class Deployment extends Component {
         .then(deploymentJson => {
           const deployment =
             deploymentJson[
-              "configService:file:/home/omar/configs/application.yml"
+              `configService:file:/home/omar/configs/application${profile}.yml`
             ];
           _this.setState({ deploymentInfo: deployment });
           _this.setState({ error: false });
@@ -53,7 +69,9 @@ class Deployment extends Component {
   };
 
   fetchApps = () => {
-    console.log(`Fetching Apps with pole time of: ${AppParams.params.appsPoleTime}`);
+    console.log(
+      `Fetching Apps with pole time of: ${AppParams.params.appsPoleTime}`
+    );
 
     // Need to set a variable for this so that we can still access
     // 'this' for props and state inside the setInterval callback
@@ -92,6 +110,7 @@ class Deployment extends Component {
   };
 
   componentDidMount() {
+    console.log("Deployment props: ", this.props);
     this.fetchDeployment();
     this.fetchApps();
   }
@@ -106,9 +125,9 @@ class Deployment extends Component {
     } else if (this.state.error === true) {
       return (
         <div>
-          <hr/>
+          <hr />
           <div className="deployment">
-          <p className="deployment-info">
+            <p className="deployment-info">
               <a href={this.props.server}>{this.props.server}</a>
             </p>
             <p className="chip red lighten-1 z-depth-2">
@@ -123,14 +142,15 @@ class Deployment extends Component {
 
     return (
       <React.Fragment>
-        <hr/>
+        <hr />
         <div className="deployment">
           <section>
             <p className="deployment-info">
               <a href={this.props.server}>{this.props.server}</a>
               <span className="right">{AppParams.params.test}</span>
               <span className="deployment-release">
-                {this.state.deploymentInfo.releaseNumber} ({this.state.deploymentInfo.releaseName})
+                {this.state.deploymentInfo.releaseNumber} (
+                {this.state.deploymentInfo.releaseName})
               </span>
             </p>
             {this.state.appsInfo.applications.application.map((app, i) => {
