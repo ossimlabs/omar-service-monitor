@@ -4,7 +4,6 @@ import Deployment from "./Deployment";
 
 class App extends Component {
   render() {
-    //console.log("Params: ", AppParams.params);
     return (
       <ErrorBoundary>
         <nav>
@@ -40,7 +39,7 @@ class App extends Component {
         </div>
         {// AppParams is a global passed down from application.yml
         // through the .gsp
-        AppParams.params.deployments.map((deployment, i) => {
+        AppParams.deployments.map((deployment, i) => {
           return (
             <div className="row" key={i}>
               <Deployment
