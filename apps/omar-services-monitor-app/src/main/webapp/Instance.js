@@ -23,7 +23,7 @@ class Instance extends Component {
       })
       .catch(error =>
         console.error(
-          `[Fetch InstanceInfo Error] connecting to ${
+          `[Fetch ${app} InstanceInfo Error] connecting to ${
             this.props.server
           } with ${error}`
         )

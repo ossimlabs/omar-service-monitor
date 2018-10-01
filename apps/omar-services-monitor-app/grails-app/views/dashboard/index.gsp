@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
 
-    <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
-
     <!--
       Notice the use of %PUBLIC_URL% in the tag above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -39,7 +34,6 @@
 </asset:script>
 <asset:deferredScripts/>
 <!-- Compiled and minified JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
 <asset:javascript src="bundle.js"/>
 </body>
 </html>
