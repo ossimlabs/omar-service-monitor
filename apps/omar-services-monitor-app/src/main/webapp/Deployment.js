@@ -22,13 +22,6 @@ class Deployment extends Component {
     } else {
       profile = `-${_this.props.profile}`;
     }
-    // console.log(
-    //   `${
-    //     _this.props.server
-    //   } =========>>> configService:file:/home/omar/configs/application${profile}.yml`
-    // );
-    // let profile = this.props.profile;
-    // console.log("profile: ", profile);
 
     let deploymentTimer = setInterval(function fetchDeploymentData() {
       fetch(`${_this.props.server}/omar-eureka-server/env`)
@@ -40,9 +33,8 @@ class Deployment extends Component {
             deploymentJson[
               `configService:file:/home/omar/configs/application${profile}.yml`
             ];
-          // We need to check to see that the application.yml with profile exists.
-          // If it doesn't we need to throw an error here.
-          console.log(`deployment for ${_this.props.server}: `, deployment);
+          // We need to check to see that the application<PROFILE>.yml with exists.
+          // If it doesn't we need to log an error to the console.
           if (deployment !== undefined) {
             _this.setState({ deploymentInfo: deployment });
             _this.setState({ error: false });
@@ -93,7 +85,9 @@ class Deployment extends Component {
           return response.json();
         })
         .then(eurekaJson => {
-          const Apps = eurekaJson;
+          const Apps = eurekaJson.applications.application.sort((a, b) =>
+            a.name.localeCompare(b.name)
+          );
           _this.setState({ appsInfo: Apps });
         })
         .catch(error =>
@@ -158,13 +152,12 @@ class Deployment extends Component {
           <section>
             <p className="deployment-info">
               <a href={this.props.server}>{this.props.server}</a>
-              <span className="right">{AppParams.params.test}</span>
               <span className="deployment-release">
                 {this.state.deploymentInfo.releaseNumber} (
                 {this.state.deploymentInfo.releaseName})
               </span>
             </p>
-            {this.state.appsInfo.applications.application.map((app, i) => {
+            {this.state.appsInfo.map((app, i) => {
               return (
                 <div className="col s2 z-depth-1 service" key={i}>
                   <ServiceMonitor server={this.props.server} app={app} />
