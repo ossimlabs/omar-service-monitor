@@ -85,9 +85,7 @@ class Deployment extends Component {
           return response.json();
         })
         .then(eurekaJson => {
-          const Apps = eurekaJson.applications.application.sort((a, b) =>
-            a.name.localeCompare(b.name)
-          );
+          const Apps = eurekaJson.applications.application;
           _this.setState({ appsInfo: Apps });
         })
         .catch(error =>
@@ -121,6 +119,10 @@ class Deployment extends Component {
   }
 
   render() {
+    const AppsList = this.state.appsInfo.sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+    console.log("AppsList: ", AppsList);
     if (this.state.appsInfo.length === 0 && this.state.error === false) {
       return (
         <div className="progress">
@@ -157,7 +159,7 @@ class Deployment extends Component {
                 {this.state.deploymentInfo.releaseName})
               </span>
             </p>
-            {this.state.appsInfo.map((app, i) => {
+            {AppsList.map((app, i) => {
               return (
                 <div className="col s2 z-depth-1 service" key={i}>
                   <ServiceMonitor server={this.props.server} app={app} />
