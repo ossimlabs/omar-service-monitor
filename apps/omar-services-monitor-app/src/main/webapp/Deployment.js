@@ -11,26 +11,22 @@ class Deployment extends Component {
   };
 
   fetchDeployment = () => {
-    console.log(
-      `Fetching Deployments with pole time of: ${
-        AppParams.params.deploymentPoleTime
-      }`
-    );
-
     // Need to set a variable for this so that we can still access
     // 'this' for props and state inside the setInterval callback
     // function
     let _this = this;
 
     let profile;
-    if (_this.props.profile == null) {
+    if (_this.props.profile == null || _this.props.profile == "") {
       profile = "";
     } else {
       profile = `-${_this.props.profile}`;
     }
-    console.log(
-      `configService:file:/home/omar/configs/application${profile}.yml`
-    );
+    // console.log(
+    //   `${
+    //     _this.props.server
+    //   } =========>>> configService:file:/home/omar/configs/application${profile}.yml`
+    // );
     // let profile = this.props.profile;
     // console.log("profile: ", profile);
 
@@ -44,8 +40,20 @@ class Deployment extends Component {
             deploymentJson[
               `configService:file:/home/omar/configs/application${profile}.yml`
             ];
-          _this.setState({ deploymentInfo: deployment });
-          _this.setState({ error: false });
+          // We need to check to see that the application.yml with profile exists.
+          // If it doesn't we need to throw an error here.
+          console.log(`deployment for ${_this.props.server}: `, deployment);
+          if (deployment !== undefined) {
+            _this.setState({ deploymentInfo: deployment });
+            _this.setState({ error: false });
+          } else {
+            console.error(
+              `[Fetch Deployments Profile Error] connecting to ${
+                _this.props.server
+              }`
+            );
+            _this.setState({ error: true });
+          }
         })
         .catch(error => {
           console.error(
@@ -69,10 +77,6 @@ class Deployment extends Component {
   };
 
   fetchApps = () => {
-    console.log(
-      `Fetching Apps with pole time of: ${AppParams.params.appsPoleTime}`
-    );
-
     // Need to set a variable for this so that we can still access
     // 'this' for props and state inside the setInterval callback
     // function
@@ -110,9 +114,16 @@ class Deployment extends Component {
   };
 
   componentDidMount() {
-    console.log("Deployment props: ", this.props);
     this.fetchDeployment();
+    console.log(
+      `Fetching Deployments with pole time of: ${
+        AppParams.params.deploymentPoleTime
+      }`
+    );
     this.fetchApps();
+    console.log(
+      `Fetching Apps with pole time of: ${AppParams.params.appsPoleTime}`
+    );
   }
 
   render() {

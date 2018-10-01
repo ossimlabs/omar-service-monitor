@@ -10,11 +10,6 @@ class ServiceMonitor extends Component {
   };
 
   fetchServices = () => {
-    console.log(
-      `Fetching Services with pole time of: ${
-        AppParams.params.servicesPoleTime
-      }`
-    );
     // Need to set a variable for this so that we can still access
     // 'this' for props and state inside the setInterval callback
     // function
@@ -42,7 +37,7 @@ class ServiceMonitor extends Component {
           })
           .catch(error =>
             console.error(
-              `[Fetch Services Error] connecting to ${
+              `[Fetch ${appName} Services Error] connecting to ${
                 _this.props.server
               } with ${error}`
             )
@@ -68,6 +63,11 @@ class ServiceMonitor extends Component {
 
   componentDidMount() {
     this.fetchServices();
+    console.log(
+      `Fetching Services with pole time of: ${
+        AppParams.params.servicesPoleTime
+      }`
+    );
   }
 
   render() {
