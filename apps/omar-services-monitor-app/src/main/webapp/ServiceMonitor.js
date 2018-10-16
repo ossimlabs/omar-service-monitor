@@ -17,10 +17,7 @@ class ServiceMonitor extends Component {
 
     let servicesTimer = setInterval(
       function fetchServicesData() {
-        console.log("################# services ############## ");
-
         const appName = _this.props.app.name.toLowerCase();
-        //console.log('appName: ', appName);
         fetch(
           `${_this.props.server}/omar-eureka-server/eureka/vips/${appName}`,
           {
@@ -34,15 +31,13 @@ class ServiceMonitor extends Component {
             return response.json();
           })
           .then(instanceJson => {
-            console.log("instanceJson", instanceJson);
             const instances = instanceJson.applications.application[0].instance;
 
             _this.setState({ instances: instances });
-            //console.log('State in the ServiceMonitor', this.state);
           })
           .catch(error =>
             console.error(
-              `[Fetch Services Error] connecting to ${
+              `[Fetch ${appName} Services Error] connecting to ${
                 _this.props.server
               } with ${error}`
             )
@@ -67,20 +62,26 @@ class ServiceMonitor extends Component {
   };
 
   componentDidMount() {
-    //console.log('ServiceMonitor Props: ', this.props);
     this.fetchServices();
+    console.log(
+      `Fetching Services with pole time of: ${
+        AppParams.params.servicesPoleTime
+      }`
+    );
   }
 
   render() {
     if (this.state.instances.length === 0) {
-      return <div className="chip center">Fetching service info...</div>;
+      return <div>Fetching service info...</div>;
     }
 
     return (
       <React.Fragment>
         <p className="service-name">
           {this.props.app.name} {this.state.version}
+          <br />
         </p>
+        <hr />
         {this.state.instances.map((instance, i) => {
           return (
             <div key={i}>
@@ -92,11 +93,6 @@ class ServiceMonitor extends Component {
             </div>
           );
         })}
-        {/* <img
-          className="right"
-          src="https://jenkins.ossim.io/buildStatus/icon?job=omar-oms-dev"
-          alt=""
-        /> */}
       </React.Fragment>
     );
   }

@@ -4,19 +4,26 @@ spring:
   cloud:
     config:
       enabled: false
-      uri: http://localhost:8888/omar-config-server
+      uri: http://omar-config-server:8888/omar-config-server
     discovery:
       enabled: false
     service-registry:
       auto-registration:
         enabled: ${spring.cloud.discovery.enabled}
-  sleuth:
-    enabled: false
-  zipkin:
-   enabled: false
----
-spring:
-  profiles: production
-  cloud:
-    config:
-      uri: http://omar-config-server:8888/omar-config-server
+  boot:
+    admin:
+      url: http://localhost:8082/omar-admin-server/
+      client:
+        prefer-ip: true
+# ---
+# spring:
+#   profiles: production
+#   cloud:
+#     config:
+#       uri: http://omar-config-server:8888/omar-config-server
+
+# Define the http protocols that swagger will use
+swagger:
+  schemes:
+    - HTTPS
+    - HTTP
