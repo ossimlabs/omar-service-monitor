@@ -139,9 +139,6 @@ omar:
         # Specify a Spring Cloud Config profile
         # profile: dev
       -
-        url: 'https://omar-stage.ossim.io'
-        # profile: stage
-      -
         url: 'https://omar.ossim.io'
         # profile: prod
       -
