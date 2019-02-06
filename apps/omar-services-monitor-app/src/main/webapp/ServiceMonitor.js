@@ -75,13 +75,18 @@ class ServiceMonitor extends Component {
       return <div>Fetching service info...</div>;
     }
 
+    let version;
+    if(this.state.version === null) {
+      version = <p className="service-version">Version: N/A</p>
+    }
+    else{
+      version = <p className="service-version">Version: {this.state.version}</p>
+    }
+
     return (
       <React.Fragment>
-        <p className="service-name">
-          {this.props.app.name} {this.state.version}
-          <br />
-        </p>
-        <hr />
+        <span className="service-name">{this.props.app.name}</span>
+        <span>{version}</span>
         {this.state.instances.map((instance, i) => {
           return (
             <div key={i}>
