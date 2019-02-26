@@ -10,7 +10,7 @@ buildscript {
         classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.14.8"
         classpath "org.grails.plugins:views-gradle:1.1.6"
         classpath 'com.bmuschko:gradle-docker-plugin:3.0.12'
-        classpath 'io.ossim:gradleDefaults:1.5-SNAPSHOT'
+        classpath 'io.ossim:gradleDefaults:1.6-SNAPSHOT'
     }
 }
 
