@@ -132,7 +132,6 @@ class Deployment extends Component {
     } else if (this.state.error === true) {
       return (
         <div>
-          <hr />
           <div className="deployment">
             <p className="deployment-info">
               <a href={this.props.server}>{this.props.server}</a>
@@ -149,7 +148,6 @@ class Deployment extends Component {
 
     return (
       <React.Fragment>
-        <hr />
         <div className="deployment">
           <section>
             <p className="deployment-info">
@@ -161,7 +159,7 @@ class Deployment extends Component {
             </p>
             {AppsList.map((app, i) => {
               return (
-                <div className="col s2 z-depth-1 service" key={i}>
+                <div className="col s2 z-depth-3 service" key={i}>
                   <ServiceMonitor server={this.props.server} app={app} />
                 </div>
               );

@@ -1,18 +1,7 @@
 buildscript {
-    ext {
-        grailsVersion = project.grailsVersion
-     baseImage = "omar-base"
-    }
-    if(System.env.OMAR_COMMON_PROPERTIES)
-    {
-        apply from: System.env.OMAR_COMMON_PROPERTIES
-    }
     repositories {
-        maven { url "${ossimMavenProxy}" }
-        if( !System.env.WWW_CONNECTED || Boolean.parseBoolean( System.env.WWW_CONNECTED ) ) {
-            mavenLocal()
-            maven { url "https://repo.grails.org/grails/core" }
-        }
+        mavenLocal()
+        maven { url ossimMavenProxy }
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
@@ -20,6 +9,8 @@ buildscript {
         classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
         classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.14.8"
         classpath "org.grails.plugins:views-gradle:1.1.6"
+        classpath 'com.bmuschko:gradle-docker-plugin:3.0.12'
+        classpath 'io.ossim:gradleDefaults:1.6-SNAPSHOT'
     }
 }
 
@@ -35,34 +26,28 @@ apply plugin:"org.grails.grails-gsp"
 apply plugin:"asset-pipeline"
 
 apply plugin: "java"
-apply plugin: "maven-publish"
-apply plugin: "maven"
 
 // Needed for the react.js stuffs
 apply plugin:"com.moowork.node"
 apply plugin:"org.grails.plugins.views-json"
-
-group "omar.services.dashboard"
-
-ext {
-  grailsVersion = project.grailsVersion
-  gradleWrapperVersion = project.gradleWrapperVersion
-}
 
 assets {
     minifyJs = true
     minifyCss = true
 }
 
-
 repositories {
-  // maven { url  "http://dl.bintray.com/dmahapatro/plugins" }
-  maven { url "${ossimMavenProxy}" }
-  if( !System.env.WWW_CONNECTED || Boolean.parseBoolean( System.env.WWW_CONNECTED ) ) {
-    mavenLocal()
-    maven { url "https://repo.grails.org/grails/core" }
-  }
+  mavenLocal()
+  maven { url ossimMavenProxy }
 }
+
+io.ossim.gradleDefaults.Variables.setAdditionalVariables(project)
+io.ossim.gradleDefaults.Variables.setVersionVariables(project)
+dockerBuildDir="${rootProject.projectDir}/docker"
+version "${buildVersion}-${buildVersionTag}"
+jarDestination = "${projectDir}/build/libs/${project.name}-${version}.jar"
+io.ossim.gradleDefaults.Docker.addDockerTasks(project, dockerRegistryUrl, dockerRegistryUsername, dockerRegistryPassword, name, dockerImageTag, dockerBuildDir, jarDestination, ["BASE_IMAGE": "${dockerRegistryUrl}/${dockerBaseImage}"])
+io.ossim.gradleDefaults.Openshift.addOpenshiftTasks(project, openshiftUrl, openshiftUsername, openshiftPassword, openshiftProjectName, openshiftServiceName,  dockerRegistryUrl, name, dockerImageTag)
 
 dependencyManagement {
   imports {
@@ -110,14 +95,6 @@ dependencies {
     testRuntime "org.seleniumhq.selenium:selenium-chrome-driver:2.47.1"
     testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
-}
-
-publishing {
-  publications {
-    mavenJava(MavenPublication) {
-      from components.java
-    }
-  }
 }
 
 bootRun {
