@@ -5,20 +5,27 @@ import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 
 buildscript {
 	repositories {
-		maven { url System.getenv('MAVEN_REPO_URL') }
+		mavenLocal()
+		maven { url ossimMavenProxy }
 		maven { url "https://repo.grails.org/grails/core" }
 	}
 	dependencies {
 		classpath "org.grails:grails-gradle-plugin:$grailsVersion"
 		classpath "org.grails.plugins:hibernate5:${ hibernate5PluginVersion }"
 		classpath "gradle.plugin.com.github.erdi.webdriver-binaries:webdriver-binaries-gradle-plugin:${ webdriverPluginVersion }"
-		classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.0.10"
+
+        classpath "com.moowork.gradle:gradle-node-plugin:1.1.1"
+        classpath "com.moowork.gradle:gradle-node-plugin:1.2.0"
+        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:${assetPipelineVersion}"
+        classpath "org.grails.plugins:views-gradle:1.1.6"
+        classpath 'com.bmuschko:gradle-docker-plugin:3.0.12'
+        classpath "io.ossim:gradleDefaults:${gradleDefaultsVersion}"
 	}
 }
 
 plugins {
-	id "com.github.ben-manes.versions" version "0.21.0"
-	id 'com.bmuschko.docker-remote-api' version '4.10.0'
+	//id "com.github.ben-manes.versions" version "0.21.0"
+	//id 'com.bmuschko.docker-remote-api' version '4.10.0'
 }
 
 
@@ -264,7 +271,7 @@ subprojects { project ->
 			tags = [ "${ project.dockerTag }".toString() ]
 		}
 		
-		task tagImage( type: DockerTagImage, dependsOn: buildImage ) {
+		/*task tagImage( type: DockerTagImage, dependsOn: buildImage ) {
 			group = 'Docker'
 			description = "Tag custom docker image."
 			
@@ -272,7 +279,7 @@ subprojects { project ->
 			
 			repository = "${ dockerRegistry }/${ dockerRepo }/${ project.name }".toString()
 			tag = projectVersion
-		}
+		}*/
 		
 		docker {
 			registryCredentials {
@@ -282,13 +289,13 @@ subprojects { project ->
 			}
 		}
 		
-		task pushImage( type: DockerPushImage, dependsOn: tagImage ) {
+		/* task pushImage( type: DockerPushImage, dependsOn: tagImage ) {
 			group = 'Docker'
 			description = "Push custom docker image."
 			
 			tag = projectVersion
 			imageName = "${ dockerRegistry }/${ dockerRepo }/${ project.name }".toString()
-		}
+		}*/
 		
 		task openshiftLogin( type: Exec ) {
 			doLast {

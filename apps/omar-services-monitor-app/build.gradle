@@ -1,4 +1,4 @@
-/*
+
 grails {
     plugins {
         //compile project( ":${ rootProject.projectDir.name }-plugin" )
@@ -12,4 +12,4 @@ dependencies {
     // compile "io.ossim.omar.plugins:omar-core-plugin:+"
     }
 }
-*/
+
