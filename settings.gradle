@@ -1,9 +1,31 @@
 pluginManagement {
-  repositories {
-    maven { url ossimMavenProxy }
-  }
+	repositories {
+		maven { url System.getenv('MAVEN_REPO_URL') }
+		gradlePluginPortal()
+	}
 }
 
-include 'omar-services-monitor-app'
+[ 'lib', 'plugin', 'app' ].each { String projectType ->
+	File projectTypeDir = new File( rootDir, "${ projectType }s" )
 
-project(':omar-services-monitor-app').projectDir = "${rootProject.projectDir}/apps/omar-services-monitor-app" as File
+	if ( projectTypeDir.exists() )
+	{
+		projectTypeDir.eachDirMatch( { it.endsWith( projectType ) } ) { File subprojectDir ->
+			include subprojectDir.name
+
+			project( ":${ subprojectDir.name }" ).projectDir = subprojectDir
+		}
+	}
+}
+
+if ( System.getenv( 'O2_INLINE_BUILD' ) )
+{
+	def modules = [ ]
+
+	modules.each { module ->
+		include "${ module }-plugin"
+
+		project( ":${ module }-plugin" ).projectDir = "${ rootProject.projectDir }/../${ module }/plugins/${ module }-plugin" as File
+	}
+}
+

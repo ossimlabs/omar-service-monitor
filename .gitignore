@@ -1,12 +1,8 @@
 Thumbs.db
 .DS_Store
-gradle
-gradlew
-gradlew.bat
 .gradle
 build/
 out/
-node_modules
 .idea
 *.iml
 *.ipr
@@ -14,9 +10,3 @@ node_modules
 .project
 .settings
 .classpath
-*bundle.js
-*bundle.js.map
-bin/
-
-prodDb.mv.db
-.vscode/
