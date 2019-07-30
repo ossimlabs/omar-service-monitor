@@ -1,4 +1,4 @@
-buildscript {
+/*buildscript {
     repositories {
         mavenLocal()
         maven { url ossimMavenProxy }
@@ -10,7 +10,7 @@ buildscript {
         classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.14.8"
         classpath "org.grails.plugins:views-gradle:1.1.6"
         classpath 'com.bmuschko:gradle-docker-plugin:3.0.12'
-        classpath 'io.ossim:gradleDefaults:1.7-SNAPSHOT'
+        classpath 'io.ossim:gradleDefaults:1.8-SNAPSHOT'
     }
 }
 
@@ -137,3 +137,4 @@ tasks.withType(Test) {
     systemProperty "webdriver.chrome.driver", System.getProperty('webdriver.chrome.driver')
     systemProperty "webdriver.gecko.driver", System.getProperty('webdriver.gecko.driver')
 }
+*/
