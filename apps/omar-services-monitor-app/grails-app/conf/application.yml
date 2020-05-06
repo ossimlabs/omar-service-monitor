@@ -138,11 +138,11 @@ omar:
         url: 'https://omar-dev.ossim.io'
         # Specify a Spring Cloud Config profile
         # profile: dev
-      -
-        url: 'https://omar.ossim.io'
+    #   -
+    #     url: 'https://omar.ossim.io'
         # profile: prod
-      -
-        url: 'https://pki-omar-evwhs.ossim.io'
+    #   -
+    #     url: 'https://pki-omar-evwhs.ossim.io'
         # profile: evwhs
     # Sets the amount of time (in milliseconds) to pole the Eureka endpoint for the deployments
     deploymentPoleTime: 90000

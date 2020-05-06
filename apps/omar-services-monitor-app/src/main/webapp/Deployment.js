@@ -6,8 +6,10 @@ import "whatwg-fetch";
 class Deployment extends Component {
   state = {
     deploymentInfo: [],
+    deploymentReleaseName: null,
+    deploymentReleaseNumber: null,
     appsInfo: [],
-    error: false
+    error: false,
   };
 
   fetchDeployment = () => {
@@ -22,36 +24,44 @@ class Deployment extends Component {
     } else {
       profile = `-${_this.props.profile}`;
     }
-
+    console.log("profile is: " + profile);
     let deploymentTimer = setInterval(function fetchDeploymentData() {
-      fetch(`${_this.props.server}/omar-eureka-server/env`)
-        .then(function(response) {
+      fetch(`${_this.props.server}/omar-wfs/actuator/env`)
+        .then(function (response) {
           return response.json();
         })
-        .then(deploymentJson => {
-          const deployment =
-            deploymentJson[
-              `configService:file:/home/omar/configs/application${profile}.yml`
-            ];
+        .then((deploymentJson) => {
+          const deploymentReleaseName =
+            deploymentJson.propertySources[1].properties["about.releaseName"]
+              .value;
+
+          const deploymentReleaseNumber =
+            deploymentJson.propertySources[1].properties["about.releaseNumber"]
+              .value;
+
           // We need to check to see that the application<PROFILE>.yml with exists.
           // If it doesn't we need to log an error to the console.
-          if (deployment !== undefined) {
-            _this.setState({ deploymentInfo: deployment });
+          //if (deployment !== undefined) {
+          if (
+            deploymentReleaseName !== undefined &&
+            deploymentReleaseNumber !== undefined
+          ) {
+            //_this.setState({ deploymentInfo: deployment });
+            _this.setState({
+              deploymentReleaseNumber: deploymentReleaseNumber,
+            });
+            _this.setState({ deploymentReleaseName: deploymentReleaseName });
             _this.setState({ error: false });
           } else {
             console.error(
-              `[Fetch Deployments Profile Error] connecting to ${
-                _this.props.server
-              }`
+              `[Fetch Deployments Profile Error] connecting to ${_this.props.server}`
             );
             _this.setState({ error: true });
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(
-            `[Fetch Deployments Error] connecting to ${
-              _this.props.server
-            } with ${error}`
+            `[Fetch Deployments Error] connecting to ${_this.props.server} with ${error}`
           );
           _this.setState({ error: true });
         });
@@ -78,21 +88,19 @@ class Deployment extends Component {
       fetch(`${_this.props.server}/omar-eureka-server/eureka/apps`, {
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       })
-        .then(function(response) {
+        .then(function (response) {
           return response.json();
         })
-        .then(eurekaJson => {
+        .then((eurekaJson) => {
           const Apps = eurekaJson.applications.application;
           _this.setState({ appsInfo: Apps });
         })
-        .catch(error =>
+        .catch((error) =>
           console.error(
-            `[Fetch Apps Error] connecting to ${
-              _this.props.server
-            } with ${error}`
+            `[Fetch Apps Error] connecting to ${_this.props.server} with ${error}`
           )
         );
 
@@ -108,9 +116,7 @@ class Deployment extends Component {
   componentDidMount() {
     this.fetchDeployment();
     console.log(
-      `Fetching Deployments with pole time of: ${
-        AppParams.params.deploymentPoleTime
-      }`
+      `Fetching Deployments with pole time of: ${AppParams.params.deploymentPoleTime}`
     );
     this.fetchApps();
     console.log(
@@ -153,8 +159,8 @@ class Deployment extends Component {
             <p className="deployment-info">
               <a href={this.props.server}>{this.props.server}</a>
               <span className="deployment-release">
-                {this.state.deploymentInfo.releaseNumber} (
-                {this.state.deploymentInfo.releaseName})
+                {this.state.deploymentReleaseNumber} (
+                {this.state.deploymentReleaseName})
               </span>
             </p>
             {AppsList.map((app, i) => {
