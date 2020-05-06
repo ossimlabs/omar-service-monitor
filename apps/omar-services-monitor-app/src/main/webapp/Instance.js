@@ -4,16 +4,16 @@ import moment from "moment";
 class Instance extends Component {
   state = {
     instanceInfo: null,
-    instanceMetrics: this.props.data.leaseInfo.serviceUpTimestamp
+    instanceMetrics: this.props.data.leaseInfo.serviceUpTimestamp,
   };
 
   fetchInstanceInfo = () => {
     const app = this.props.data.app.toLowerCase();
-    fetch(`${this.props.server}/${app}/info`)
-      .then(function(response) {
+    fetch(`${this.props.server}/${app}/actuator/info`)
+      .then(function (response) {
         return response.json();
       })
-      .then(instanceJson => {
+      .then((instanceJson) => {
         //console.log('instanceJson:', instanceJson);
         const instanceInfo = instanceJson.app;
         //console.log("App:", instanceInfo);
@@ -21,11 +21,9 @@ class Instance extends Component {
 
         this.setState({ instanceInfo });
       })
-      .catch(error =>
+      .catch((error) =>
         console.error(
-          `[Fetch ${app} InstanceInfo Error] connecting to ${
-            this.props.server
-          } with ${error}`
+          `[Fetch ${app} InstanceInfo Error] connecting to ${this.props.server} with ${error}`
         )
       );
   };
@@ -43,7 +41,7 @@ class Instance extends Component {
   componentWillReceiveProps(nextProps) {
     // Update the state when new props are passed in from the parent component
     this.setState({
-      instanceMetrics: nextProps.data.leaseInfo.serviceUpTimestamp
+      instanceMetrics: nextProps.data.leaseInfo.serviceUpTimestamp,
     });
   }
 

@@ -37,18 +37,20 @@ class App extends Component {
             </span>
           </p>
         </div>
-        {// AppParams is a global passed down from application.yml
-        // through the .gsp
-        AppParams.deployments.map((deployment, i) => {
-          return (
-            <div className="row" key={i}>
-              <Deployment
-                server={deployment.url}
-                profile={deployment.profile}
-              />
-            </div>
-          );
-        })}
+        {
+          // AppParams is a global passed down from application.yml
+          // through the .gsp
+          AppParams.deployments.map((deployment, i) => {
+            return (
+              <div className="row" key={i}>
+                <Deployment
+                  server={deployment.url}
+                  profile={deployment.profile}
+                />
+              </div>
+            );
+          })
+        }
       </ErrorBoundary>
     );
   }
