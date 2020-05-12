@@ -32,7 +32,7 @@ class ServiceMonitor extends Component {
           })
           .then(instanceJson => {
             const instances = instanceJson.applications.application[0].instance;
-            // Print something here to see if this could be where population onf instance list could
+            // Print something here to see if this could be where population on of instance list could
 
             _this.setState({ instances: instances });
           })
