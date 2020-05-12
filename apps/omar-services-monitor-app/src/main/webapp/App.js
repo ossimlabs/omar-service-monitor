@@ -9,9 +9,9 @@ class App extends Component {
         <nav>
           <div className="nav-wrapper black">
             <div className="">
-              <a href="#" className="brand-logo center">
+              <h1 href="#" className="services-header">
                 O2 Services Monitor
-              </a>
+              </h1>
             </div>
           </div>
         </nav>

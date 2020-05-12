@@ -9,16 +9,23 @@ class Instance extends Component {
 
   fetchInstanceInfo = () => {
     const app = this.props.data.app.toLowerCase();
+    // making request to?
     fetch(`${this.props.server}/${app}/actuator/info`)
+    // get the JSON from response
       .then(function (response) {
         return response.json();
       })
+      // JSON is returned as instance JSON
       .then((instanceJson) => {
         //console.log('instanceJson:', instanceJson);
+        // accessing the app block
+        // app:
+        //   grailsVersion: "4.0.1"
+        //   name: "omar-stager-app"
+        //   version: "2.0.0-SNAPSHOT"
         const instanceInfo = instanceJson.app;
         //console.log("App:", instanceInfo);
         this.props.getVersion(instanceInfo.version);
-
         this.setState({ instanceInfo });
       })
       .catch((error) =>
@@ -28,6 +35,7 @@ class Instance extends Component {
       );
   };
 
+  // whats this mean?
   componentDidMount() {
     this.fetchInstanceInfo();
     // Set new thresholds
@@ -37,7 +45,8 @@ class Instance extends Component {
     moment.relativeTimeThreshold("d", 30);
     moment.relativeTimeThreshold("M", 12);
   }
-
+  
+  // what are props?
   componentWillReceiveProps(nextProps) {
     // Update the state when new props are passed in from the parent component
     this.setState({
@@ -66,7 +75,9 @@ class Instance extends Component {
     ) : (
       <div>No Metrics</div>
     );
-
+    
+    /* Determin the actual colors
+     for services by choisng the correct class name for css */
     let metrics = parseFloat(
       this.getInstanceStatus(this.state.instanceMetrics)
     );
