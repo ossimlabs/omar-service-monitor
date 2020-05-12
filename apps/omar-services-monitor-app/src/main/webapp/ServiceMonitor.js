@@ -32,6 +32,7 @@ class ServiceMonitor extends Component {
           })
           .then(instanceJson => {
             const instances = instanceJson.applications.application[0].instance;
+            // Print something here to see if this could be where population onf instance list could
 
             _this.setState({ instances: instances });
           })
@@ -70,11 +71,14 @@ class ServiceMonitor extends Component {
     );
   }
 
+  // If there are no instances in the instances list then display fetiching message
   render() {
     if (this.state.instances.length === 0) {
-      return <div>Fetching service info...</div>;
+      return <div style={{color: "whitesmoke"}}>Fetching service info...</div>;
     }
 
+    // If the version is not available use place holder otherwise use the
+    // instances version 
     let version;
     if(this.state.version === null) {
       version = <p className="service-version">Version: N/A</p>
@@ -83,7 +87,10 @@ class ServiceMonitor extends Component {
       version = <p className="service-version">Version: {this.state.version}</p>
     }
 
+    // return the name of the app and the version
+    // then
     return (
+      // react fragments ????
       <React.Fragment>
         <span className="service-name">{this.props.app.name}</span>
         <span>{version}</span>
