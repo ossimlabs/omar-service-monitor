@@ -35,7 +35,7 @@ class Instance extends Component {
       );
   };
 
-  // whats this mean?
+  // what does this mean?
   componentDidMount() {
     this.fetchInstanceInfo();
     // Set new thresholds
