@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ErrorBoundary from "./ErrorBoundary";
 import Deployment from "./Deployment";
+import APITest from "./APITest"
 
 class App extends Component {
   render() {
@@ -35,6 +36,7 @@ class App extends Component {
                 &gt; 48hr
               </span>
             </span>
+            <APITest />
           </p>
         </div>
         {
