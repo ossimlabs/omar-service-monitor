@@ -113,48 +113,76 @@ class Deployment extends Component {
     }, 3000); // Intial pole for deployments is after 3 seconds
   };
 
+  fetchJenkins = () => {
+    let headers = new Headers();
+    // headers.append(
+    //   "Authorization",
+    //   "Basic ax004571@digitalglobe.com:11a87c40387dc56dc488e4cd3c078cf136"
+    // );
+    fetch(
+      //"https://damp-ridge-36721.herokuapp.com/https://jenkins.ossim.io/api/json",
+      "/omar-services-monitor/dashboard/proxy",
+      {
+        //credentials: 'include',
+        method: "GET",
+        //headers: headers,
+      }
+    )
+      .then(function (response) {
+        //console.log(response);
+        return response.json();
+      })
+      .then((json) => {
+        console.log(json);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   componentDidMount() {
-    this.fetchDeployment();
-    console.log(
-      `Fetching Deployments with pole time of: ${AppParams.params.deploymentPoleTime}`
-    );
-    this.fetchApps();
-    console.log(
-      `Fetching Apps with pole time of: ${AppParams.params.appsPoleTime}`
-    );
+    // this.fetchDeployment();
+    // console.log(
+    //   `Fetching Deployments with pole time of: ${AppParams.params.deploymentPoleTime}`
+    // );
+    // this.fetchApps();
+    // console.log(
+    //   `Fetching Apps with pole time of: ${AppParams.params.appsPoleTime}`
+    // );
+    this.fetchJenkins();
   }
 
   render() {
-    const AppsList = this.state.appsInfo.sort((a, b) =>
-      a.name.localeCompare(b.name)
-    );
-    console.log("AppsList: ", AppsList);
-    if (this.state.appsInfo.length === 0 && this.state.error === false) {
-      return (
-        <div className="progress">
-          <div className="indeterminate" />
-        </div>
-      );
-    } else if (this.state.error === true) {
-      return (
-        <div>
-          <div className="deployment">
-            <p className="deployment-info">
-              <a href={this.props.server}>{this.props.server}</a>
-            </p>
-            <p className="chip red lighten-1 z-depth-2">
-              <span className="white-text">
-                There was an error fetching the details for this deployment.
-              </span>
-            </p>
-          </div>
-        </div>
-      );
-    }
+    // const AppsList = this.state.appsInfo.sort((a, b) =>
+    //   a.name.localeCompare(b.name)
+    // );
+    // console.log("AppsList: ", AppsList);
+    // if (this.state.appsInfo.length === 0 && this.state.error === false) {
+    //   return (
+    //     <div className="progress">
+    //       <div className="indeterminate" />
+    //     </div>
+    //   );
+    // } else if (this.state.error === true) {
+    //   return (
+    //     <div>
+    //       <div className="deployment">
+    //         <p className="deployment-info">
+    //           <a href={this.props.server}>{this.props.server}</a>
+    //         </p>
+    //         <p className="chip red lighten-1 z-depth-2">
+    //           <span className="white-text">
+    //             There was an error fetching the details for this deployment.
+    //           </span>
+    //         </p>
+    //       </div>
+    //     </div>
+    //   );
+    // }
 
     return (
       <React.Fragment>
-        <div className="deployment">
+        {/* <div className="deployment">
           <section>
             <p className="deployment-info">
               <a href={this.props.server}>{this.props.server}</a>
@@ -171,7 +199,8 @@ class Deployment extends Component {
               );
             })}
           </section>
-        </div>
+        </div> */}
+        <div>Test</div>
       </React.Fragment>
     );
   }
