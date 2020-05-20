@@ -151,3 +151,13 @@ omar:
     # Sets the amount of time (in milliseconds) to pole the Eureka endpoint for the services (pod instances)
     servicesPoleTime: 30000
 
+---
+grails:
+    cors:
+        enabled: true
+
+---
+# Will need to grab these from spring-config-server
+jenkins:
+    url: "<JENKINS_URL>/api/json"
+    auth: "<USER_NAME>:<USER_TOKEN>"
