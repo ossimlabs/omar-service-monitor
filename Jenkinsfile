@@ -52,30 +52,30 @@ podTemplate(
           }
           load "common-variables.groovy"
       }
-      stage('Build') {
-        container('builder') {
-          sh """
-          ./gradlew assemble \
-              -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
-          ./gradlew copyJarToDockerDir \
-              -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
-          """
-          archiveArtifacts "plugins/*/build/libs/*.jar"
-          archiveArtifacts "apps/*/build/libs/*.jar"
-        }
-      }
-    stage ("Publish Nexus"){	
-      container('builder'){
-          withCredentials([[$class: 'UsernamePasswordMultiBinding',
-                          credentialsId: 'nexusCredentials',
-                          usernameVariable: 'MAVEN_REPO_USERNAME',
-                          passwordVariable: 'MAVEN_REPO_PASSWORD']])
-          {
+      stage ("Build") {
+          container('builder') {
             sh """
-            ./gradlew publish \
+            gradle assemble \
                 -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
             """
+            archiveArtifacts "apps/*/build/libs/*.jar"
           }
+    }
+
+    stage ("Publish Docker App")
+    {
+        container('builder') {
+            withCredentials([[$class: 'UsernamePasswordMultiBinding',
+                            credentialsId: 'dockerCredentials',
+                            usernameVariable: 'DOCKER_REGISTRY_USERNAME',
+                            passwordVariable: 'DOCKER_REGISTRY_PASSWORD']])
+            {
+                // Run all tasks on the app. This includes pushing to OpenShift and S3.
+                sh """
+                gradle pushDockerImage \
+                    -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
+                """
+            }
         }
     }
     stage('Docker build') {
