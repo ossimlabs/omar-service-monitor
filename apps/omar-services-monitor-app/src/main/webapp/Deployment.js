@@ -6,8 +6,10 @@ import "whatwg-fetch";
 class Deployment extends Component {
   state = {
     deploymentInfo: [],
+    deploymentReleaseName: null,
+    deploymentReleaseNumber: null,
     appsInfo: [],
-    error: false
+    error: false,
   };
 
   fetchDeployment = () => {
@@ -22,36 +24,44 @@ class Deployment extends Component {
     } else {
       profile = `-${_this.props.profile}`;
     }
-
+    console.log("profile is: " + profile);
     let deploymentTimer = setInterval(function fetchDeploymentData() {
-      fetch(`${_this.props.server}/omar-eureka-server/env`)
-        .then(function(response) {
+      fetch(`${_this.props.server}/omar-wfs/actuator/env`)
+        .then(function (response) {
           return response.json();
         })
-        .then(deploymentJson => {
-          const deployment =
-            deploymentJson[
-              `configService:file:/home/omar/configs/application${profile}.yml`
-            ];
+        .then((deploymentJson) => {
+          const deploymentReleaseName =
+            deploymentJson.propertySources[1].properties["about.releaseName"]
+              .value;
+
+          const deploymentReleaseNumber =
+            deploymentJson.propertySources[1].properties["about.releaseNumber"]
+              .value;
+
           // We need to check to see that the application<PROFILE>.yml with exists.
           // If it doesn't we need to log an error to the console.
-          if (deployment !== undefined) {
-            _this.setState({ deploymentInfo: deployment });
+          //if (deployment !== undefined) {
+          if (
+            deploymentReleaseName !== undefined &&
+            deploymentReleaseNumber !== undefined
+          ) {
+            //_this.setState({ deploymentInfo: deployment });
+            _this.setState({
+              deploymentReleaseNumber: deploymentReleaseNumber,
+            });
+            _this.setState({ deploymentReleaseName: deploymentReleaseName });
             _this.setState({ error: false });
           } else {
             console.error(
-              `[Fetch Deployments Profile Error] connecting to ${
-                _this.props.server
-              }`
+              `[Fetch Deployments Profile Error] connecting to ${_this.props.server}`
             );
             _this.setState({ error: true });
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(
-            `[Fetch Deployments Error] connecting to ${
-              _this.props.server
-            } with ${error}`
+            `[Fetch Deployments Error] connecting to ${_this.props.server} with ${error}`
           );
           _this.setState({ error: true });
         });
@@ -78,21 +88,19 @@ class Deployment extends Component {
       fetch(`${_this.props.server}/omar-eureka-server/eureka/apps`, {
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       })
-        .then(function(response) {
+        .then(function (response) {
           return response.json();
         })
-        .then(eurekaJson => {
+        .then((eurekaJson) => {
           const Apps = eurekaJson.applications.application;
           _this.setState({ appsInfo: Apps });
         })
-        .catch(error =>
+        .catch((error) =>
           console.error(
-            `[Fetch Apps Error] connecting to ${
-              _this.props.server
-            } with ${error}`
+            `[Fetch Apps Error] connecting to ${_this.props.server} with ${error}`
           )
         );
 
@@ -105,56 +113,82 @@ class Deployment extends Component {
     }, 3000); // Intial pole for deployments is after 3 seconds
   };
 
+  fetchJenkins = () => {
+    let headers = new Headers();
+    // headers.append(
+    //   "Authorization",
+    //   "Basic ax004571@digitalglobe.com:11a87c40387dc56dc488e4cd3c078cf136"
+    // );
+    fetch(
+      //"https://damp-ridge-36721.herokuapp.com/https://jenkins.ossim.io/api/json",
+      "/omar-services-monitor/dashboard/proxy",
+      {
+        //credentials: 'include',
+        method: "GET",
+        //headers: headers,
+      }
+    )
+      .then(function (response) {
+        //console.log(response);
+        return response.json();
+      })
+      .then((json) => {
+        console.log(json);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   componentDidMount() {
-    this.fetchDeployment();
-    console.log(
-      `Fetching Deployments with pole time of: ${
-        AppParams.params.deploymentPoleTime
-      }`
-    );
-    this.fetchApps();
-    console.log(
-      `Fetching Apps with pole time of: ${AppParams.params.appsPoleTime}`
-    );
+    // this.fetchDeployment();
+    // console.log(
+    //   `Fetching Deployments with pole time of: ${AppParams.params.deploymentPoleTime}`
+    // );
+    // this.fetchApps();
+    // console.log(
+    //   `Fetching Apps with pole time of: ${AppParams.params.appsPoleTime}`
+    // );
+    this.fetchJenkins();
   }
 
   render() {
-    const AppsList = this.state.appsInfo.sort((a, b) =>
-      a.name.localeCompare(b.name)
-    );
-    console.log("AppsList: ", AppsList);
-    if (this.state.appsInfo.length === 0 && this.state.error === false) {
-      return (
-        <div className="progress">
-          <div className="indeterminate" />
-        </div>
-      );
-    } else if (this.state.error === true) {
-      return (
-        <div>
-          <div className="deployment">
-            <p className="deployment-info">
-              <a href={this.props.server}>{this.props.server}</a>
-            </p>
-            <p className="chip red lighten-1 z-depth-2">
-              <span className="white-text">
-                There was an error fetching the details for this deployment.
-              </span>
-            </p>
-          </div>
-        </div>
-      );
-    }
+    // const AppsList = this.state.appsInfo.sort((a, b) =>
+    //   a.name.localeCompare(b.name)
+    // );
+    // console.log("AppsList: ", AppsList);
+    // if (this.state.appsInfo.length === 0 && this.state.error === false) {
+    //   return (
+    //     <div className="progress">
+    //       <div className="indeterminate" />
+    //     </div>
+    //   );
+    // } else if (this.state.error === true) {
+    //   return (
+    //     <div>
+    //       <div className="deployment">
+    //         <p className="deployment-info">
+    //           <a href={this.props.server}>{this.props.server}</a>
+    //         </p>
+    //         <p className="chip red lighten-1 z-depth-2">
+    //           <span className="white-text">
+    //             There was an error fetching the details for this deployment.
+    //           </span>
+    //         </p>
+    //       </div>
+    //     </div>
+    //   );
+    // }
 
     return (
       <React.Fragment>
-        <div className="deployment">
+        {/* <div className="deployment">
           <section>
             <p className="deployment-info">
               <a href={this.props.server}>{this.props.server}</a>
               <span className="deployment-release">
-                {this.state.deploymentInfo.releaseNumber} (
-                {this.state.deploymentInfo.releaseName})
+                {this.state.deploymentReleaseNumber} (
+                {this.state.deploymentReleaseName})
               </span>
             </p>
             {AppsList.map((app, i) => {
@@ -165,7 +199,8 @@ class Deployment extends Component {
               );
             })}
           </section>
-        </div>
+        </div> */}
+        <div>Test</div>
       </React.Fragment>
     );
   }

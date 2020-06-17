@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import ErrorBoundary from "./ErrorBoundary";
 import Deployment from "./Deployment";
+<<<<<<< HEAD
+import APITest from "./APITest";
+=======
+
+>>>>>>> 7bba2dc5ada2264de8cd91417e9186a98e74f561
 
 class App extends Component {
   render() {
@@ -9,9 +14,9 @@ class App extends Component {
         <nav>
           <div className="nav-wrapper black">
             <div className="">
-              <a href="#" className="brand-logo center">
+              <h1 href="#" className="services-header">
                 O2 Services Monitor
-              </a>
+              </h1>
             </div>
           </div>
         </nav>
@@ -35,20 +40,26 @@ class App extends Component {
                 &gt; 48hr
               </span>
             </span>
+<<<<<<< HEAD
+            {/* <APITest /> */}
+=======
+>>>>>>> 7bba2dc5ada2264de8cd91417e9186a98e74f561
           </p>
         </div>
-        {// AppParams is a global passed down from application.yml
-        // through the .gsp
-        AppParams.deployments.map((deployment, i) => {
-          return (
-            <div className="row" key={i}>
-              <Deployment
-                server={deployment.url}
-                profile={deployment.profile}
-              />
-            </div>
-          );
-        })}
+        {
+          // AppParams is a global passed down from application.yml
+          // through the .gsp
+          AppParams.deployments.map((deployment, i) => {
+            return (
+              <div className="row" key={i}>
+                <Deployment
+                  server={deployment.url}
+                  profile={deployment.profile}
+                />
+              </div>
+            );
+          })
+        }
       </ErrorBoundary>
     );
   }
