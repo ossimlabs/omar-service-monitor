@@ -115,12 +115,7 @@ class Deployment extends Component {
 
   fetchJenkins = () => {
     let headers = new Headers();
-    // headers.append(
-    //   "Authorization",
-    //   "Basic ax004571@digitalglobe.com:11a87c40387dc56dc488e4cd3c078cf136"
-    // );
     fetch(
-      //"https://damp-ridge-36721.herokuapp.com/https://jenkins.ossim.io/api/json",
       "/omar-services-monitor/dashboard/proxy",
       {
         //credentials: 'include',
