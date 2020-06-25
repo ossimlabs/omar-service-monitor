@@ -54,8 +54,17 @@ podTemplate(
       }
       stage ("Build") {
           container('builder') {
+              dir('apps/omar-services-monitor-app'){
+                  sh """
+                  apt-get install -y build-essential libpng-dev
+                  
+                  """
+              }
             sh """
+            
             ./gradlew assemble \
+                -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
+            ./gradlew copyJarToDockerDir \
                 -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
             """
             archiveArtifacts "apps/*/build/libs/*.jar"
@@ -65,7 +74,7 @@ podTemplate(
       container('docker') {
         withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_DOWNLOAD_URL}") {  //TODO
           sh """
-            docker build -t "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}"/omar-wms-app:${BRANCH_NAME} ./docker
+            docker build --build-arg BASE_IMAGE=nexus-docker-public-hosted.ossim.io/ossim-runtime-alpine-minimal --network=host -t "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}"/omar-wms-app:${BRANCH_NAME} ./docker
           """
         }
       }
