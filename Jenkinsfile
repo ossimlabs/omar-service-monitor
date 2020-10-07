@@ -77,24 +77,47 @@ podTemplate(
             archiveArtifacts "apps/*/build/libs/*.jar"
           }
     }
-    stage('Docker build') {
+	    stage('Docker build') {
       container('docker') {
         withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_DOWNLOAD_URL}") {  //TODO
-          sh """
-            docker build --build-arg BASE_IMAGE=nexus-docker-public-hosted.ossim.io/ossim-runtime-alpine-minimal --network=host -t "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}"/omar-wms-app:${BRANCH_NAME} ./docker
-          """
-        }
-      }
-      stage('Docker push'){
-        container('docker') {
-          withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}") {
-          sh """
-              docker push "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}"/omar-wms-app:${BRANCH_NAME}
-          """
+          if (BRANCH_NAME == 'master'){
+                sh """
+                    docker build --build-arg BASE_IMAGE=nexus-docker-public-hosted.ossim.io/ossim-runtime-alpine-minimal --network=host -t "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}"/omar-services-monitor-app:"${VERSION}" ./docker
+
+                """
+          }
+          else {
+                sh """
+                    docker build --build-arg BASE_IMAGE=nexus-docker-public-hosted.ossim.io/ossim-runtime-alpine-minimal --network=host -t "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}"/omar-services-monitor-app:"${VERSION}".a ./docker
+                """
           }
         }
       }
     }
+	
+	    stage('Docker push'){
+        container('docker') {
+          withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}") {
+            if (BRANCH_NAME == 'master'){
+                sh """
+                    docker push "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}"/omar-services-monitor-app:"${VERSION}"
+                """
+            }
+            else if (BRANCH_NAME == 'dev') {
+                sh """
+                    docker tag "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}"/omar-services-monitor-app:"${VERSION}".a "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}"/omar-services-monitor-app:dev
+                    docker push "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}"/omar-services-monitor-app:"${VERSION}".a
+                    docker push "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}"/omar-services-monitor-app:dev
+                """
+            }
+            else {
+                sh """
+                    docker push "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}"/omar-services-monitor-app:"${VERSION}".a           
+                """
+            }
+          }
+        }
+      }
       
     stage('New Deploy'){
         container('kubectl-aws-helm') {
