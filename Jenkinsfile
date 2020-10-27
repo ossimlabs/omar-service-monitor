@@ -74,7 +74,7 @@ podTemplate(
       container('docker') {
         withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_DOWNLOAD_URL}") {  //TODO
           sh """
-            docker build --build-arg BASE_IMAGE=nexus-docker-public-hosted.ossim.io/ossim-runtime-alpine-minimal --network=host -t "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}"/omar-wms-app:${BRANCH_NAME} ./docker
+            docker build --build-arg BASE_IMAGE=nexus-docker-public-hosted.ossim.io/ossim-runtime-alpine-minimal --network=host -t "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}"/omar-services-monitor:${BRANCH_NAME} ./docker
           """
         }
       }
@@ -82,7 +82,7 @@ podTemplate(
         container('docker') {
           withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}") {
           sh """
-              docker push "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}"/omar-wms-app:${BRANCH_NAME}
+              docker push "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}"/omar-services-monitor:${BRANCH_NAME}
           """
           }
         }
